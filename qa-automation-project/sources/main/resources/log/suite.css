@@ -1,0 +1,101 @@
+body {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    display: block;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+div.top {
+    width: 100%;
+    height: 15%;
+    top: 0;
+    overflow: auto;
+}
+
+div.tree {
+    width: 20%;
+    height: 100%;
+    float: left;
+    overflow: auto;
+}
+
+div.content {
+    width: 80%;
+    height: 100%;
+    float: right;
+}
+
+div#holder {
+    width: 100%;
+    height: 80%;
+    top: 15%;
+    bottom: 0
+}
+
+td.title-left {
+    text-align: right;
+    padding-right: 10px;
+    font-style: italic;
+}
+
+td.title-right {
+    text-align: left;
+}
+
+body, table {
+    font-family: courier, serif;
+    font-size: small;
+}
+
+th {
+    background: #336699;
+    color: #FFFFFF;
+    text-align: left;
+    padding-left: 5px;
+}
+
+table.title {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+a.test-extra {
+    font-style: italic;
+    font-size: small;
+    font-family: courier, serif;
+}
+
+b.fail {
+    color: red;
+}
+
+b.pass {
+    color: green;
+}
+
+span.fail {
+    color: red;
+}
+
+span.pass {
+    color: green;
+}
+
+iframe {
+    height: 95%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    display: none
+}
+
+div#stattable {
+    max-height: 95%;
+    max-width: 98%;
+    overflow: auto;
+}

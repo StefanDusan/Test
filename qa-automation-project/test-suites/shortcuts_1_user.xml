@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="Shortcuts 1 user" parallel="classes" thread-count="4" verbose="2">
+    <test name="Shortcuts 1 user">
+        <groups>
+            <run>
+                <include name="Shortcuts"/>
+                <exclude name="Two_users"/>
+                <exclude name="Three_users"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="com.intpfy.test.*"/>
+        </packages>
+    </test>
+</suite>

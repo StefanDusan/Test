@@ -1,0 +1,43 @@
+version: 0.2
+
+env:
+  shell: bash
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto11
+    commands:
+      - wget -q https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.9/allure-commandline-2.13.9.tgz
+      - tar -xzf allure-commandline-2.13.9.tgz
+  pre_build:
+    commands:
+      - git log --decorate --pretty=oneline --abbrev-commit -n 50
+  build:
+    commands:
+      - |
+        read -r -a files <<< "$TESTS_SUITE_FILE"
+        EXIT_CODE=0
+        for file in "${files[@]}";
+        do
+          (mvn -B test -Dselenoid.enabled=$SELENOID_ENABLED \
+            -Dselenoid.driverURI=$SELENOID_DRIVER_URI \
+            -Dselenoid.ChromeVersion=$SELENOID_CHROME_VERSION \
+            -Dselenoid.enableVNC=$SELENOID_ENABLE_VNC \
+            -Dintegration.testrail.enabled=$INTEGRATION_TESTRAIL_ENABLED \
+            -Dintegration.testrail.run_id=$INTEGRATION_TESTRAIL_RUN_ID \
+            -Dintegration.testrail.run_failed=$INTEGRATION_TESTRAIL_RUN_FAILED \
+            -Denvironment=$ENVIRONMENT \
+            -Dtests.suiteFile=$file) \
+            || EXIT_CODE=$?
+          mv FileStorage/selenium-logs/*[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9].html FileStorage/selenium-logs/${file/.xml/}.html
+        done
+        exit $EXIT_CODE
+  post_build:
+    commands:
+      - ./allure-2.13.9/bin/allure generate ./target/allure-results -o ./FileStorage/allure-reports/
+      - cd ./FileStorage/selenium-logs && for i in *.html; do echo "<p><a href=$i>${i/.html/}</a></p>" >> index.html; done;
+artifacts:
+  files:
+    - '**/*'
+  base-directory: 'FileStorage'

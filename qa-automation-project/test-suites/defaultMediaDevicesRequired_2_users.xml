@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="Default media devices required 2 users" parallel="classes" thread-count="2" verbose="2">
+    <test name="Default media devices required 2 users">
+        <groups>
+            <run>
+                <include name="Media_devices_required"/>
+                <exclude name="WebRTC"/>
+                <exclude name="One_user"/>
+                <exclude name="Three_users"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="com.intpfy.test.*"/>
+        </packages>
+    </test>
+</suite>
