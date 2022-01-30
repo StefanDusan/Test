@@ -1,0 +1,11 @@
+package enums;
+
+public enum ConfigProperties {
+    URLGOOGLE,
+    URLORANGEHRMLOGINPAGE,
+    USERNAME,
+    PASSWORD,
+    PASSWORDINVALID,
+    INVALIDCREDENTIALSERRORMESSAGE,
+    BROWSERS
+}

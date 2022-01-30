@@ -1,0 +1,55 @@
+All page classes which will represent concrete web pages should be declared as final (not extendable)
+First we should create in specific page class are locators specific for the page (should be declared as private final)
+Second we should create methods to access locators
+NOTE: In order to chain methods (works for methods from the same page only), at the end of method add line:
+    return this;
+NOTE: If command results with page change, as last command line constructor of new page should be called, like (if OrangeHRMHomePage should open):
+    return new OrangeHRMHomePage();
+
+EXAMPLE: without this ->
+        public void enterUsername (String username){
+            DriverManager.getDriver().findElement(usernameInputBox).sendKeys(username);
+        }
+EXAMPLE: with this ->
+        public OrangeHRMLoginPage enterUsername (String username){
+            DriverManager.getDriver().findElement(usernameInputBox).sendKeys(username);
+            return this; // use this to chain methods (works for methods from the same page only)
+        }
+
+EXAMPLE: Explicit wait on some event/condition can be defined like ->
+        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), 10);
+        wait.until(ExpectedConditions.elementToBeClickable(loginButton));
+
+NOTE: BasePage should handle all sendKeys and Click actions (to avoid repeating them inside each page)
+
+EXAMPLE: sending keys to page element can be drastically simplified if BasePage is used
+        without BP:                             DriverManager.getDriver().findElement(usernameInputBox).sendKeys(username);
+        with BP (sendKeys implemented in BP):   sendKeys(usernameInputBox,username);
+
+NOTE: BasePage should handle explicit waits instead to handle them in each page, methods should be private
+
+EXAMPLE: method for wait on element to be clickable and on element to be present
+    private void waitForElementToBeClickable(By by){
+        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(),10);
+        wait.until(ExpectedConditions.elementToBeClickable(by));
+    }
+    private void waitForElementToBePresent(By by){
+        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(),10);
+        wait.until(ExpectedConditions.presenceOfElementLocated(by));
+    }
+
+NOTE: Wait scenarios require Base page to repeat If..Else construction for each method where explicit Wait is needed which is bad practice.
+Instead, separate package called 'factories' inside src/main/java having ExplicitWaitFactory class (with private constructor) should be created and used
+
+EXAMPLE: After ExplicitWaitFactory class is finished, Base page methods can be optimized by removing DriverManager usage
+    protected void sendKeys(By by, String value, WaitStrategy waitStrategy) {
+        ExplicitWaitFactory.performExplicitWait(by, waitStrategy).sendKeys(value);
+    }
+
+    protected void click(By by, WaitStrategy waitStrategy) {
+        ExplicitWaitFactory.performExplicitWait(by, waitStrategy).click();
+    }
+
+    protected String getText(By by, WaitStrategy waitStrategy) {
+        return ExplicitWaitFactory.performExplicitWait(by, waitStrategy).getText();
+    }

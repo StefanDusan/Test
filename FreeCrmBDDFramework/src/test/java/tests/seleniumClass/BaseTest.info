@@ -1,0 +1,5 @@
+BaseTest class is extended by test classes and cannot be declared as final
+EXAMPLE: Concrete test can be disabled (excluded from execution) by updating @Test annotation to:
+    @Test (enabled = false)
+
+NOTE: BaseTest class should be used to initialize (@Before test/method annotation) and terminate (@After test/method annotation) driver
