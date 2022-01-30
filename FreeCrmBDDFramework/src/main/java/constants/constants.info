@@ -1,0 +1,8 @@
+1. Access modifier of the constants needs to be private --> private
+2. Constants should be always declared as final --> private final
+3. Create a private constructor (to avoid creating object for the class - can be called directly by referencing by name only) --> private static final
+4. Constants should be accessed via getters
+
+When creating constants class, private constructor must be created in order to access constants directly without creating objects of the class
+As we are creating string constant, name should be all uppercase to easily distinct from standard strings
+If string returned by getter is static, getter must be static too

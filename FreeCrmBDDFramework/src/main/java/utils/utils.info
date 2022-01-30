@@ -1,0 +1,48 @@
+EXAMPLE: If parallel execution is configured in TestNG:
+    <suite name="All Test Suite" parallel="methods" thread-count="2">
+... in order to handle web driver threads, below static declaration is needed (Thread Safety):
+    private static ThreadLocal<WebDriver> dr =  new ThreadLocal<>();
+
+
+NOTE: Property file read class need to have private constructor as it should be accessible without creating object (using without creating instance of the class)
+As it won't be extended (the same goes for driver classes, FirstTest class ...), class should be also final: public final class ReadPropertyFile
+Location of properties file should be specified in constants class
+NOTE: Static blocks are executed immediately when its class starts loading, and anything within the block will be kept in memory (good practice is to add code
+to read all properties inside static block so classes can access property values faster)
+
+EXAMPLE: To properly debug issues with properties (for provided key value is not located), error handling is needed, like:
+        if (Objects.isNull(value)){
+            throw new Exception("Property name " + key + " is not found. Check 'config.properties'");
+        }
+
+EXAMPLE: If using properties from property file we can replace:
+    DriverManager.getDriver().get("https://google.com");
+... with:
+    DriverManager.getDriver().get(ReadPropertyFile.getValue("url"));
+
+EXAMPLE: Read properties inside static block
+        static {
+            // static block
+            FileInputStream fs = null;
+            try {
+                fs = new FileInputStream(FrameworkConstants.getConfigFilePath());
+                properties.load(fs);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+EXAMPLE: Property file should be protected via ENUMS (in example: ConfigProperties) to avoid type errors for properties
+    public static String getValue(ConfigProperties key) {
+        String value = "";
+        value = properties.getProperty(key.name().toLowerCase());
+        if (Objects.isNull(value)) {
+            try {
+                throw new Exception("Property name " + key + " is not found. Check 'config.properties'");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return value;
+    }
+}

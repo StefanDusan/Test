@@ -1,0 +1,4 @@
+NOTE: Property file is used when variables need to be updated over time/during tests execution, which is impossible with constants
+NOTE: Property file is an ordinary file, not a class, should be in tests folder as is closely related to tests
+NOTE: To read from property file, class is needed
+NOTE: Properties should be named in lowercase in order to use ENUMS for accessing them

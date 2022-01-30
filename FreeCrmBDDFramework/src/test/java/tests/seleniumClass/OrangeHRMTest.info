@@ -1,0 +1,32 @@
+EXAMPLE: without chaining ->
+    @Test
+    public void loginTest() throws Exception {
+        // to use any of pages defined inside pages package, new objects for each page need to be created
+        OrangeHRMLoginPage lp = new OrangeHRMLoginPage();
+        OrangeHRMHomePage hp = new OrangeHRMHomePage();
+
+        // open login page, enter username and password, click on login button
+        lp.pageNavigateTo();
+        lp.enterUsername(ReadPropertyFile.getValue("username"));
+        lp.enterPassword(ReadPropertyFile.getValue("password"));
+        lp.clickLoginButton();
+
+        // open account menu and logout
+        hp.clickWelcomeLink();
+        hp.clickLogoutButton();
+    }
+
+EXAMPLE: with chaining ->
+    @Test
+    public void loginTest() throws Exception {
+        // to use any of pages defined inside pages package, new objects for each page need to be created
+        OrangeHRMLoginPage lp = new OrangeHRMLoginPage();
+
+        // open login page, enter username and password, click on login button
+        lp.pageNavigateTo()
+                .enterUsername(ReadPropertyFile.getValue("username"))
+                .enterPassword(ReadPropertyFile.getValue("password"))
+                .clickLoginButton()
+                .clickWelcomeLink()
+                .clickLogoutButton();
+    }

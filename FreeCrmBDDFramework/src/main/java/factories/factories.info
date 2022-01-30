@@ -1,0 +1,28 @@
+EXAMPLE: ExplicitWaitFactory class methods are mix of Base page wait methods for both click and presence and its methods where they are used
+    public static void performExplicitWait(By by, WaitStrategy waitStrategy) {
+        if (waitStrategy == WaitStrategy.CLICKABLE) {
+            WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), FrameworkConstants.getWaittimeseconds());
+            wait.until(ExpectedConditions.elementToBeClickable(by));
+        } else if (waitStrategy == WaitStrategy.PRESENT) {
+            WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), FrameworkConstants.getWaittimeseconds());
+            wait.until(ExpectedConditions.presenceOfElementLocated(by));
+        }
+    }
+
+NOTE: After ExplicitWaitFactory class methods are written, both if conditions and private methods can be removed from Base page class
+
+EXAMPLE: performExplicitWait method can be further improved by chaining as WebDriverWait(driver).until(condition) returns WebElement
+    public static WebElement performExplicitWait(By by, WaitStrategy waitStrategy) {
+        WebElement element = null;
+        if (waitStrategy == WaitStrategy.CLICKABLE) {
+            element = new WebDriverWait(DriverManager.getDriver(), FrameworkConstants.getWaittimeseconds()).
+                until(ExpectedConditions.elementToBeClickable(by));
+        } else if (waitStrategy == WaitStrategy.PRESENT) {
+            element = new WebDriverWait(DriverManager.getDriver(), FrameworkConstants.getWaittimeseconds()).
+                until(ExpectedConditions.presenceOfElementLocated(by));
+        } else if (waitStrategy == WaitStrategy.VISIBLE) {
+            element = new WebDriverWait(DriverManager.getDriver(), FrameworkConstants.getWaittimeseconds()).
+                until(ExpectedConditions.visibilityOfElementLocated(by));
+        }
+        return element;
+    }
